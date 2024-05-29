@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`http://localhost:4000/loginapi`, formData);
+      const res = await axios.post(`https://curd-operation-wine.vercel.app/loginapi`, formData);
       if(res.status === 200) {
         alert("Login successfully");      
         navigate("/showproduct");

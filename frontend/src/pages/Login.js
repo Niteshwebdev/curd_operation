@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`https://curd-operation-altu.vercel.app/loginapi`, formData);
+      const res = await axios.post("https://curd-operation-altu.vercel.app/loginapi", formData);
       if(res.status === 200) {
         alert("Login successfully");      
         navigate("/showproduct");

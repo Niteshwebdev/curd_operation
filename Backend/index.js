@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const helmet = require("helmet");
 
 const connectDB = require("./database/db");
 const { Signupapi } = require("./Api/signupapi");
@@ -14,22 +16,15 @@ const { Loginapi } = require("./Api/loginapi");
 // const { Logoutapi } = require("./Api/logoutapi");
 
 const app = express();
-const PORT = 4000;
-
-// Secret key generation
-// const secretKey = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-// if (!process.env.SESSION_SECRET) {
-//   process.env.SESSION_SECRET = secretKey;
-// }
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 
 app.use(
   cors({
-    origin: [
-      "https://curd-operation-wine.vercel.app",
-    ],
+    origin: "https://curd-operation-wine.vercel.app", // Adjust this to your frontend's URL
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
@@ -38,14 +33,7 @@ app.use(
 app.get("/", (req, res) => {
   app.use(express.static(path.resolve(__dirname, "frontend", "build")));
   res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
-  });
-
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: true,
-//   cookie: { secure: false }, // Set 'secure: true' if using HTTPS
-// }));
+});
 
 app.use('/images/product', express.static(path.join(__dirname, 'images/product')));
 
@@ -57,6 +45,11 @@ app.post("/deleteproduct", Deleteproduct);
 app.post("/loginapi", Loginapi);
 // app.post("/logoutapi", Logoutapi);
 // app.post("/session", Session);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: [
-      "http://curd-operation-wine.vercel.app",
+      "https://curd-operation-wine.vercel.app",
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],

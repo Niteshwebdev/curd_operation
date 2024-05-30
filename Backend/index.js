@@ -1,8 +1,6 @@
-require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const helmet = require("helmet");
 
 const connectDB = require("./database/db");
 const { Signupapi } = require("./Api/signupapi");
@@ -20,18 +18,21 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
 
 app.use(
   cors({
-    origin: "https://curd-operation-wine.vercel.app/", // Adjust this to your frontend's URL
+    origin: [
+      
+      "https://curd-operation-wine.vercel.app/" // Replace with your Vercel frontend domain
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 
+app.use(express.static(path.resolve(__dirname, "frontend", "build")));
+
 app.get("/", (req, res) => {
-  app.use(express.static(path.resolve(__dirname, "frontend", "build")));
   res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
 });
 
@@ -55,4 +56,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-connectDB();
+connectDB().catch(err => {
+  console.error('Failed to connect to MongoDB', err);
+  process.exit(1);
+});

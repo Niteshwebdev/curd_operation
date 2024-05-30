@@ -24,7 +24,7 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "https://curd-operation-wine.vercel.app", // Adjust this to your frontend's URL
+    origin: "https://curd-operation-wine.vercel.app/", // Adjust this to your frontend's URL
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
